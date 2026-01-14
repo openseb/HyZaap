@@ -1,6 +1,6 @@
 <div align="center">
 
-![HyZaap Logo](Images/Logo.png)
+![HyZaap Logo](Images/Logo-Github.png)
 
 # HyZaap
 
