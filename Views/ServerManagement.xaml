@@ -1,0 +1,599 @@
+<UserControl x:Class="HyZaap.Views.ServerManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:HyZaap.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource HytaleDarkBg}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{StaticResource HytaleCardBg}" Padding="20" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="← Back" Padding="10,8" Background="{StaticResource HytaleBorder}"
+                       Margin="0,0,20,0" Click="BackButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Background" Value="{StaticResource HytaleBorder}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="#2D2D35"/>
+                                    <Setter Property="Foreground" Value="#707070"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#4A4A55"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <TextBlock Grid.Column="1" Text="{Binding Server.Name}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource HytaleText}" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Content="Start" Command="{Binding StartServerCommand}" 
+                           Background="{StaticResource HytaleAccentGreen}" Margin="0,0,10,0"
+                           Visibility="{Binding IsRunning, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Background" Value="{StaticResource HytaleAccentGreen}"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#2D2D35"/>
+                                        <Setter Property="Foreground" Value="#707070"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#5CBF60"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="Stop" Command="{Binding StopServerCommand}" 
+                           Background="#D13438" Margin="0,0,10,0"
+                           Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Background" Value="#D13438"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#2D2D35"/>
+                                        <Setter Property="Foreground" Value="#707070"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#C02A2E"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="Restart" Command="{Binding RestartServerCommand}" 
+                           Background="#FF8C00" Margin="0,0,10,0"
+                           Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Background" Value="#FF8C00"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#2D2D35"/>
+                                        <Setter Property="Foreground" Value="#707070"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E67C00"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="Auth Login" Command="{Binding AuthLoginCommand}" 
+                           Background="{StaticResource HytaleAccentBlue}" Margin="0,0,10,0"
+                           ToolTip="Run /auth login device and open authentication link"
+                           Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Background" Value="{StaticResource HytaleAccentBlue}"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#2D2D35"/>
+                                        <Setter Property="Foreground" Value="#707070"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource HytaleAccentHover}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="Delete" Command="{Binding DeleteServerCommand}" 
+                           Background="#D13438"
+                           Padding="15,8">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Background" Value="#D13438"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#2D2D35"/>
+                                        <Setter Property="Foreground" Value="#707070"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#C02A2E"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Tab Control -->
+        <TabControl Grid.Row="1" Margin="20" Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}">
+            <TabControl.Resources>
+                <!-- TabItem Style -->
+                <Style TargetType="TabItem">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="{StaticResource HytaleTextSecondary}"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="15,10"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border Name="Border" Background="{TemplateBinding Background}" 
+                                       BorderBrush="{TemplateBinding BorderBrush}"
+                                       BorderThickness="{TemplateBinding BorderThickness}"
+                                       CornerRadius="4,4,0,0"
+                                       Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter ContentSource="Header" 
+                                                    HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource HytaleCardBg}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource HytaleAccentBlue}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource HytaleText}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                
+                <!-- ScrollBar Style -->
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Background" Value="#1E1E24"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Width" Value="12"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar">
+                                <Grid>
+                                    <Track x:Name="PART_Track" IsDirectionReversed="True" Focusable="False">
+                                        <Track.Thumb>
+                                            <Thumb Name="Thumb" Background="#3A3A45" BorderThickness="0">
+                                                <Thumb.Style>
+                                                    <Style TargetType="Thumb">
+                                                        <Setter Property="MinHeight" Value="20"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Thumb">
+                                                                    <Border Background="{TemplateBinding Background}" 
+                                                                           CornerRadius="6" 
+                                                                           BorderThickness="0"/>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#4A4A55"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsDragging" Value="True">
+                                                                <Setter Property="Background" Value="{StaticResource HytaleAccentBlue}"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Thumb.Style>
+                                            </Thumb>
+                                        </Track.Thumb>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            
+            <!-- Console Tab -->
+            <TabItem Header="Console">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Console Toolbar -->
+                    <Border Grid.Row="0" Background="{StaticResource HytaleCardBg}" Padding="10" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0,0,0,1">
+                        <Button Content="Clear Console" Command="{Binding ClearConsoleCommand}" 
+                               HorizontalAlignment="Right" Padding="10,5" FontSize="12"
+                               Background="{StaticResource HytaleBorder}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                    <Setter Property="Background" Value="{StaticResource HytaleBorder}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#4A4A55"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Border>
+                    
+                    <!-- Console Output -->
+                    <Border Grid.Row="1" Background="#0F0F12" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0" Padding="10" CornerRadius="0">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="ConsoleScrollViewer">
+                            <ScrollViewer.Resources>
+                                <Style TargetType="ScrollBar" BasedOn="{StaticResource {x:Type ScrollBar}}"/>
+                            </ScrollViewer.Resources>
+                            <ItemsControl ItemsSource="{Binding ConsoleOutput}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="{StaticResource HytaleAccentGreen}" FontFamily="Consolas" FontSize="12" 
+                                                  TextWrapping="Wrap" Margin="0,2"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+            
+            <!-- Easy Settings Tab -->
+            <TabItem Header="Easy Settings">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Server Configuration" FontSize="20" FontWeight="Bold" 
+                                  Foreground="{StaticResource HytaleText}" Margin="0,0,0,20"/>
+                        
+                        <!-- Basic Settings -->
+                        <Border Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" 
+                               BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Basic Settings" FontSize="16" FontWeight="Bold" 
+                                          Foreground="{StaticResource HytaleText}" Margin="0,0,0,15"/>
+                                
+                                <StackPanel Margin="0,0,0,15">
+                                    <TextBlock Text="Server Name" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                    <TextBlock Text="The display name for your server (folder will be renamed automatically)" 
+                                              Foreground="{StaticResource HytaleTextSecondary}" FontSize="11" Margin="0,0,0,8"/>
+                                    <TextBox Text="{Binding ServerName, UpdateSourceTrigger=PropertyChanged}" FontSize="14"/>
+                                </StackPanel>
+                                
+                                <StackPanel Margin="0,0,0,15">
+                                    <TextBlock Text="Server Port" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                    <TextBlock Text="The port players will use to connect to your server" 
+                                              Foreground="{StaticResource HytaleTextSecondary}" FontSize="11" Margin="0,0,0,8"/>
+                                    <TextBox Text="{Binding Server.Port}" FontSize="14"/>
+                                </StackPanel>
+                                
+                                <StackPanel Margin="0,0,0,15">
+                                    <TextBlock Text="Bind Address" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                    <TextBlock Text="IP address to bind the server to (0.0.0.0 = all interfaces)" 
+                                              Foreground="{StaticResource HytaleTextSecondary}" FontSize="11" Margin="0,0,0,8"/>
+                                    <TextBox Text="{Binding Server.BindAddress}" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Memory Settings -->
+                        <Border Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" 
+                               BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Memory Settings" FontSize="16" FontWeight="Bold" 
+                                          Foreground="{StaticResource HytaleText}" Margin="0,0,0,15"/>
+                                
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,15">
+                                        <TextBlock Text="Minimum Memory (MB)" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                        <TextBlock Text="Memory allocated when server starts" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" FontSize="11" Margin="0,0,0,8"/>
+                                        <TextBox Text="{Binding Server.MinMemoryMB}" FontSize="14"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,15">
+                                        <TextBlock Text="Maximum Memory (MB)" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                        <TextBlock Text="Maximum memory the server can use" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" FontSize="11" Margin="0,0,0,8"/>
+                                        <TextBox Text="{Binding Server.MaxMemoryMB}" FontSize="14"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Advanced Settings -->
+                        <Border Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" 
+                               BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Advanced Settings" FontSize="16" FontWeight="Bold" 
+                                          Foreground="{StaticResource HytaleText}" Margin="0,0,0,15"/>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                    <CheckBox IsChecked="{Binding Server.UseAOTCache}" 
+                                             Content="Use AOT Cache (Faster startup)" 
+                                             Foreground="{StaticResource HytaleText}" 
+                                             VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                    <TextBlock Text="Pre-compiles code for faster server startup" 
+                                              Foreground="{StaticResource HytaleTextSecondary}" 
+                                              FontSize="11" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                    <CheckBox IsChecked="{Binding Server.DisableSentry}" 
+                                             Content="Disable Sentry (Error reporting)" 
+                                             Foreground="{StaticResource HytaleText}" 
+                                             VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                    <TextBlock Text="Disables automatic error reporting to developers" 
+                                              Foreground="{StaticResource HytaleTextSecondary}" 
+                                              FontSize="11" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                    <CheckBox IsChecked="{Binding Server.EnableBackups}" 
+                                             Content="Enable Automatic Backups" 
+                                             Foreground="{StaticResource HytaleText}" 
+                                             VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                    <TextBlock Text="Automatically backup your server world" 
+                                              Foreground="{StaticResource HytaleTextSecondary}" 
+                                              FontSize="11" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                                <StackPanel Visibility="{Binding Server.EnableBackups, Converter={StaticResource BoolToVisibilityConverter}}" Margin="20,0,0,15">
+                                    <TextBlock Text="Backup Frequency (minutes)" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding Server.BackupFrequencyMinutes}" FontSize="14" Width="200" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                                
+                                <StackPanel>
+                                    <TextBlock Text="Authentication Mode" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="AuthModeComboBox" FontSize="14" Width="200" HorizontalAlignment="Left" 
+                                             SelectionChanged="AuthModeComboBox_SelectionChanged">
+                                        <ComboBoxItem Content="authenticated" Tag="authenticated"/>
+                                        <ComboBoxItem Content="offline" Tag="offline"/>
+                                    </ComboBox>
+                                    <TextBlock Text="authenticated = Requires Hytale account, offline = Anyone can join" 
+                                              Foreground="{StaticResource HytaleTextSecondary}" FontSize="11" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Save Button -->
+                        <Button Content="Save Settings" Command="{Binding SaveConfigCommand}" 
+                               HorizontalAlignment="Right" Padding="20,10" FontSize="14"
+                               Background="{StaticResource HytaleAccentGreen}" Margin="0,0,0,20">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                    <Setter Property="Background" Value="{StaticResource HytaleAccentGreen}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#5CBF60"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
+            <!-- Easy Config Edit Tab -->
+            <TabItem Header="Easy Config Edit">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Padding="20">
+                        <ScrollViewer.Resources>
+                            <Style TargetType="ScrollBar" BasedOn="{StaticResource {x:Type ScrollBar}}"/>
+                        </ScrollViewer.Resources>
+                        <StackPanel>
+                            <TextBlock Text="Easy Config Editor" FontSize="20" FontWeight="Bold" 
+                                      Foreground="{StaticResource HytaleText}" Margin="0,0,0,20"/>
+                            
+                            <!-- Gameplay Settings -->
+                            <Border Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" 
+                                   BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                <StackPanel>
+                                    <TextBlock Text="Gameplay Settings" FontSize="16" FontWeight="Bold" 
+                                              Foreground="{StaticResource HytaleText}" Margin="0,0,0,15"/>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsPvpEnabled}" 
+                                                 Content="Enable PvP" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="Players can attack each other" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsFallDamageEnabled}" 
+                                                 Content="Enable Fall Damage" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="Players take damage from falling" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Margin="0,0,0,15">
+                                        <TextBlock Text="World Seed" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                        <TextBlock Text="Random number that determines world generation (0 = random)" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" FontSize="11" Margin="0,0,0,8"/>
+                                        <TextBox Text="{Binding EasyConfig.Seed}" FontSize="14"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- World Settings -->
+                            <Border Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" 
+                                   BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                <StackPanel>
+                                    <TextBlock Text="World Settings" FontSize="16" FontWeight="Bold" 
+                                              Foreground="{StaticResource HytaleText}" Margin="0,0,0,15"/>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsTicking}" 
+                                                 Content="World Ticking" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="World time and events progress" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsBlockTicking}" 
+                                                 Content="Block Ticking" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="Blocks update and change over time" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsSpawningNPC}" 
+                                                 Content="Spawn NPCs" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="NPCs spawn naturally in the world" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Save Settings -->
+                            <Border Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" 
+                                   BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                <StackPanel>
+                                    <TextBlock Text="Save Settings" FontSize="16" FontWeight="Bold" 
+                                              Foreground="{StaticResource HytaleText}" Margin="0,0,0,15"/>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsSavingPlayers}" 
+                                                 Content="Save Player Data" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="Player progress and inventory are saved" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsSavingChunks}" 
+                                                 Content="Save World Chunks" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="World changes are saved to disk" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <CheckBox IsChecked="{Binding EasyConfig.IsUnloadingChunks}" 
+                                                 Content="Unload Unused Chunks" 
+                                                 Foreground="{StaticResource HytaleText}" 
+                                                 VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                        <TextBlock Text="Unused chunks are removed from memory" 
+                                                  Foreground="{StaticResource HytaleTextSecondary}" 
+                                                  FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Status Message -->
+                            <Border Background="{StaticResource HytaleCardBg}" Padding="15" Margin="0,0,0,20" 
+                                   CornerRadius="4" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="1"
+                                   Visibility="{Binding EasyConfig.StatusMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                                <TextBlock Text="{Binding EasyConfig.StatusMessage}" Foreground="{StaticResource HytaleText}" 
+                                          TextWrapping="Wrap" MinHeight="20"/>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                    
+                    <!-- Action Buttons -->
+                    <Border Grid.Row="1" Background="{StaticResource HytaleCardBg}" Padding="20" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0,1,0,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Save Config" Command="{Binding EasyConfig.SaveCommand}" 
+                                   Margin="0,0,10,0" Padding="20,10" FontSize="14"/>
+                            <Button Content="Save &amp; Restart" Command="{Binding EasyConfig.SaveAndRestartCommand}" 
+                                   Padding="20,10" FontSize="14"
+                                   Background="{StaticResource HytaleAccentGreen}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Background" Value="{StaticResource HytaleAccentGreen}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#5CBF60"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Command Input -->
+        <Border Grid.Row="2" Background="{StaticResource HytaleCardBg}" Padding="20" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding CommandInput, UpdateSourceTrigger=PropertyChanged}" 
+                        FontFamily="Consolas" FontSize="12" KeyDown="CommandInput_KeyDown"
+                        Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Grid.Column="1" Content="Send" Command="{Binding SendCommandCommand}" 
+                       Margin="10,0,0,0" IsEnabled="{Binding IsRunning}"
+                       Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
+

@@ -1,0 +1,266 @@
+<UserControl x:Class="HyZaap.Views.ServerSetup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:HyZaap.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <converters:StepVisibilityConverter x:Key="StepVisibilityConverter"/>
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource HytaleDarkBg}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{StaticResource HytaleCardBg}" Padding="20" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0,0,0,1">
+            <TextBlock Text="Server Setup Wizard" FontSize="24" FontWeight="Bold" Foreground="{StaticResource HytaleText}"/>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="40">
+            <StackPanel>
+                <!-- Step 1: Java Check -->
+                <Border Visibility="{Binding CurrentStep, Converter={StaticResource StepVisibilityConverter}, ConverterParameter=1}"
+                       Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="1" CornerRadius="8" Padding="30" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Step 1: Java Installation" FontSize="20" FontWeight="Bold" Foreground="{StaticResource HytaleText}" Margin="0,0,0,20"/>
+                        <TextBlock TextWrapping="Wrap" Foreground="{StaticResource HytaleTextSecondary}" Margin="0,0,0,20">
+                            Hytale servers require Java 25 or higher. Please ensure Java is installed before proceeding.
+                        </TextBlock>
+                        
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                            <TextBlock Text="Java Status: " Foreground="{StaticResource HytaleText}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding JavaVersion}" Foreground="{Binding JavaInstalled, Converter={StaticResource BoolToColorConverter}}" 
+                                      VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Button Content="Check Java Installation" Command="{Binding CheckJavaCommand}" 
+                                   Margin="0,0,10,0"
+                                   IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"/>
+                            <Button Content="Download Java 25" Command="{Binding DownloadJavaCommand}" 
+                                   Background="{StaticResource HytaleAccentGreen}"
+                                   IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"
+                                   Visibility="{Binding JavaInstalled, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Background" Value="{StaticResource HytaleAccentGreen}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="#2D2D35"/>
+                                                <Setter Property="Foreground" Value="#707070"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#5CBF60"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Background" Value="#45A049"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Step 2: Server Files -->
+                <Border Visibility="{Binding CurrentStep, Converter={StaticResource StepVisibilityConverter}, ConverterParameter=2}"
+                       Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="1" CornerRadius="8" Padding="30" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Step 2: Server Files" FontSize="20" FontWeight="Bold" Foreground="{StaticResource HytaleText}" Margin="0,0,0,20"/>
+                        
+                        <TextBlock Text="Server Name:" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding ServerName}" Margin="0,0,0,20"/>
+
+                        <TextBlock Text="Download Method:" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                        <ComboBox Margin="0,0,0,20"
+                                 SelectionChanged="DownloadMethod_SelectionChanged">
+                            <ComboBoxItem Content="Downloader (Recommended)" IsSelected="True"/>
+                            <ComboBoxItem Content="Copy from Launcher"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Server Directory:" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" Text="{Binding ServerDirectory}" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" Content="Browse..." Command="{Binding BrowseServerDirectoryCommand}"/>
+                        </Grid>
+
+                        <Border Visibility="{Binding DownloadMethod, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Copy from Launcher}"
+                               Background="{StaticResource HytaleCardBg}" Padding="15" Margin="0,0,0,20" CornerRadius="4" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding LauncherPath}" Foreground="{StaticResource HytaleText}" 
+                                          VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                <Button Grid.Column="1" Content="Browse..." Command="{Binding BrowseLauncherPathCommand}" 
+                                       Margin="10,0,0,0"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Step 3: Configuration -->
+                <Border Visibility="{Binding CurrentStep, Converter={StaticResource StepVisibilityConverter}, ConverterParameter=3}"
+                       Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="1" CornerRadius="8" Padding="30" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Step 3: Server Configuration" FontSize="20" FontWeight="Bold" Foreground="{StaticResource HytaleText}" Margin="0,0,0,20"/>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,20">
+                                <TextBlock Text="Port:" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding Port}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,20">
+                                <TextBlock Text="Bind Address:" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding BindAddress}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,20">
+                                <TextBlock Text="Min Memory (MB):" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding MinMemoryMB}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,0,20">
+                                <TextBlock Text="Max Memory (MB):" Foreground="{StaticResource HytaleText}" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding MaxMemoryMB}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Status Message -->
+                <Border Background="{StaticResource HytaleCardBg}" Padding="15" CornerRadius="4" Margin="0,0,0,20" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="1">
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource HytaleText}" TextWrapping="Wrap" MinHeight="20"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="{StaticResource HytaleCardBg}" Padding="20" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0" Content="Cancel" 
+                       HorizontalAlignment="Left" Width="100"
+                       Background="#3F3F46"
+                       Click="CancelButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Background" Value="#3F3F46"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="#2D2D30"/>
+                                    <Setter Property="Foreground" Value="#606060"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#4F4F56"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Grid.Column="0" Content="Back" Command="{Binding PreviousStepCommand}" 
+                       HorizontalAlignment="Left" Width="100" Margin="110,0,0,0"
+                       Background="{StaticResource HytaleBorder}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Background" Value="{StaticResource HytaleBorder}"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentStep}" Value="2">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding CurrentStep}" Value="3">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="#2D2D35"/>
+                                    <Setter Property="Foreground" Value="#707070"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#4A4A55"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="Next" Command="{Binding NextStepCommand}" 
+                           Margin="0,0,10,0" Width="100">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentStep}" Value="3">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#2D2D35"/>
+                                        <Setter Property="Foreground" Value="#707070"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="Finish Setup" Command="{Binding FinishSetupCommand}" 
+                           Width="120"
+                           Background="{StaticResource HytaleAccentGreen}"
+                           IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Background" Value="{StaticResource HytaleAccentGreen}"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentStep}" Value="3">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#2D2D35"/>
+                                        <Setter Property="Foreground" Value="#707070"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#5CBF60"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Background" Value="#45A049"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
+

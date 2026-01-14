@@ -1,0 +1,27 @@
+﻿<Window x:Class="HyZaap.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HyZaap"
+        xmlns:views="clr-namespace:HyZaap.Views"
+        xmlns:converters="clr-namespace:HyZaap.Converters"
+        mc:Ignorable="d"
+        Title="HyZaap - Hytale Server Manager" Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource HytaleDarkBg}">
+    <Window.Resources>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        <converters:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
+        <converters:BoolToStatusColorConverter x:Key="BoolToStatusColorConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <converters:StepVisibilityConverter x:Key="StepVisibilityConverter"/>
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <ContentControl x:Name="ContentArea"/>
+    </Grid>
+</Window>

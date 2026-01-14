@@ -1,0 +1,113 @@
+<UserControl x:Class="HyZaap.Views.ServerList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:HyZaap.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
+        <converters:BoolToStatusColorConverter x:Key="BoolToStatusColorConverter"/>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource HytaleDarkBg}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource HytaleCardBg}" Padding="20" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Hytale Server Manager" FontSize="24" FontWeight="Bold" Foreground="{StaticResource HytaleText}" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Content="+ New Server" FontSize="14" 
+                        Command="{Binding NavigateToSetupCommand}"/>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Servers}" Margin="20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{StaticResource HytaleCardBg}" BorderBrush="{StaticResource HytaleBorder}" BorderThickness="1" 
+                                CornerRadius="8" Padding="20" Margin="10" Width="300" Cursor="Hand"
+                                MouseLeftButtonDown="ServerCard_MouseLeftButtonDown">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="{StaticResource HytaleCardBg}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#2D2D35"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource HytaleAccentBlue}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Text="{Binding Name}" FontSize="18" FontWeight="Bold" 
+                                          Foreground="{StaticResource HytaleText}" Margin="0,0,0,10"/>
+                                
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,5">
+                                    <TextBlock Text="Port: " Foreground="{StaticResource HytaleTextSecondary}"/>
+                                    <TextBlock Text="{Binding Port}" Foreground="{StaticResource HytaleText}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,5">
+                                    <Ellipse Width="10" Height="10" Margin="0,0,5,0" VerticalAlignment="Center">
+                                        <Ellipse.Fill>
+                                            <SolidColorBrush Color="{Binding IsRunning, Converter={StaticResource BoolToStatusColorConverter}}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Text="{Binding IsRunning, Converter={StaticResource BoolToStatusConverter}}" 
+                                              Foreground="{StaticResource HytaleText}"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="3" Text="{Binding ServerPath}" FontSize="10" 
+                                          Foreground="{StaticResource HytaleTextSecondary}" TextTrimming="CharacterEllipsis" Margin="0,0,0,10"/>
+
+                                <Button Grid.Row="4" Content="Edit Config" Padding="8,4" FontSize="12"
+                                       Click="EditConfigButton_Click"
+                                       Background="{StaticResource HytaleBorder}">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                            <Setter Property="Background" Value="{StaticResource HytaleBorder}"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#4A4A55"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Border Grid.Row="1" Visibility="{Binding Servers.Count, Converter={StaticResource CountToVisibilityConverter}}"
+               HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="No servers configured. Click 'New Server' to get started." 
+                      Foreground="#808080" FontSize="16" TextAlignment="Center"/>
+        </Border>
+    </Grid>
+</UserControl>
+
