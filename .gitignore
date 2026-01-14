@@ -87,3 +87,6 @@ java/
 # OS
 .DS_Store
 Thumbs.db
+
+# PowerShell scripts
+*.ps1
