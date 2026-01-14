@@ -99,21 +99,6 @@ dotnet build --configuration Release
 
 ### Creating a Release Build
 
-Use the included PowerShell script:
-
-```powershell
-# Patch version bump (1.0.0 → 1.0.1)
-.\build-release.ps1
-
-# Minor version bump (1.0.0 → 1.1.0)
-.\build-release.ps1 -BumpType minor
-
-# Major version bump (1.0.0 → 2.0.0)
-.\build-release.ps1 -BumpType major
-```
-
-For manual builds:
-
 ```bash
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 ```
