@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="HyZaap - Hytale Server Manager" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource HytaleDarkBg}">
+        Background="{StaticResource HytaleDarkBg}" Icon="pack://application:,,,/Images/Favicon.png">
     <Window.Resources>
         <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
         <converters:BoolToStatusConverter x:Key="BoolToStatusConverter"/>

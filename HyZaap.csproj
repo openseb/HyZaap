@@ -10,7 +10,16 @@
     <Version>1.0.5</Version>
     <AssemblyVersion>1.0.5.0</AssemblyVersion>
     <FileVersion>1.0.5.0</FileVersion>
+    <ApplicationIcon>Images\Favicon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Images\Favicon.ico" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Resource Include="Images\Favicon.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="9.0.0" />

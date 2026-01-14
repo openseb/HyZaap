@@ -1,28 +1,34 @@
+<div align="center">
+
+![HyZaap Logo](Images/Logo.png)
+
 # HyZaap
 
 Windows desktop application for managing Hytale game servers. Built with WPF and .NET 10.0.
 
+</div>
+
 ## Screenshots
 
-![Server List](Screenshots/1.png)
+![Server List](Images/1.png)
 
-![Server Setup](Screenshots/2.png)
+![Server Setup](Images/2.png)
 
-![Server Management](Screenshots/3.png)
+![Server Management](Images/3.png)
 
-![Server Configuration](Screenshots/4.png)
+![Server Configuration](Images/4.png)
 
-![Console View](Screenshots/5.png)
+![Console View](Images/5.png)
 
 ## Features
 
-- Multi-server management from a single interface
-- Automated server setup wizard
-- Automatic Java 25 download and installation
-- Real-time console output with command execution
-- Easy and advanced configuration editors
-- OAuth2 device authentication flow
-- Process reattachment when reopening the application
+- 🖥️ Multi-server management from a single interface
+- ⚙️ Automated server setup wizard
+- ☕ Automatic Java 25 download and installation
+- 📺 Real-time console output with command execution
+- 🔧 Easy and advanced configuration editors
+- 🔐 OAuth2 device authentication flow
+- 🔄 Process reattachment when reopening the application
 
 ## Requirements
 
@@ -123,7 +129,7 @@ HyZaap/
 ├── Views/              # XAML views
 ├── Services/           # Business logic services
 ├── Converters/         # XAML value converters
-├── Screenshots/        # Application screenshots
+├── Images/             # Application images and screenshots
 └── HyZaap.csproj       # Project file
 ```
 
@@ -170,3 +176,11 @@ Contributions are welcome. Please submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see [LICENSE.txt](LICENSE.txt) for details.
+
+---
+
+<div align="center">
+
+Made with ❤️ for the Hytale community
+
+</div>
